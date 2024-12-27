@@ -1,0 +1,24 @@
+﻿$UserDisplayName = "John Doe"
+$UserPrincipalName = "johndoe@yourdomain.com"
+$UserPassword = "P@ssw0rd123!"
+$MailNickname = "johndoe"
+
+$SecurePassword = ConvertTo-SecureString -String $UserPassword -AsPlainText -Force
+$UserParams = @{
+    DisplayName        = $UserDisplayName
+    UserPrincipalName  = $UserPrincipalName
+    AccountEnabled     = $true
+    MailNickname       = $MailNickname
+    PasswordProfile    = @{
+        Password = $SecurePassword
+        ForceChangePasswordNextLogin = $true
+    }
+    UsageLocation      = "US"
+}
+
+try {
+    New-AzureADUser @UserParams
+    Write-Output "User '$UserDisplayName' created successfully."
+} catch {
+    Write-Error "Failed to create user: $_"
+}
